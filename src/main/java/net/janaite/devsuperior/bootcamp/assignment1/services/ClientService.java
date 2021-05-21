@@ -1,5 +1,7 @@
 package net.janaite.devsuperior.bootcamp.assignment1.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.janaite.devsuperior.bootcamp.assignment1.dto.ClientDTO;
 import net.janaite.devsuperior.bootcamp.assignment1.entities.Client;
 import net.janaite.devsuperior.bootcamp.assignment1.repositories.ClientRepository;
+import net.janaite.devsuperior.bootcamp.assignment1.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ClientService {
@@ -22,4 +25,10 @@ public class ClientService {
 		return list.map(x -> new ClientDTO(x));
 	}
 
+	@Transactional(readOnly = true)
+	public ClientDTO findById(Long id) {
+		Optional<Client> obj = repository.findById(id);
+		Client entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+		return new ClientDTO(entity);
+	}
 }
