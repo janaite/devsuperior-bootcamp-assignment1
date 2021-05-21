@@ -2,6 +2,8 @@ package net.janaite.devsuperior.bootcamp.assignment1.services;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,13 +42,28 @@ public class ClientService {
 		return new ClientDTO(entity);
 	}
 
+	@Transactional
+	public ClientDTO update(Long id, ClientDTO dto) {
+		try {
+			Client entity = repository.getOne(id);
+			updateEntityFromDto(dto, entity);
+			entity = repository.save(entity);
+			return new ClientDTO(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(String.format("ID not found [%d]", id));
+		}
+	}
+
 	private void copyDtoIntoEntity(ClientDTO dto, Client entity) {
 		entity.setId(null);
+		updateEntityFromDto(dto, entity);
+	}
+
+	private void updateEntityFromDto(ClientDTO dto, Client entity) {
 		entity.setName(dto.getName());
 		entity.setCpf(dto.getCpf());
 		entity.setIncome(dto.getIncome());
 		entity.setBirthDate(dto.getBirthDate());
 		entity.setChildren(dto.getChildren());
 	}
-
 }
