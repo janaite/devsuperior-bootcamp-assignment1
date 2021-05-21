@@ -1,3 +1,6 @@
+--
+-- mock data generated mainly with mockaroo.com + some tweaks
+--
 INSERT INTO tb_client(name, cpf, income, birth_Date, children) VALUES ('Johnathan Braney','58258160389','7324.74','1966-12-15T22:20:00Z','4');
 INSERT INTO tb_client(name, cpf, income, birth_Date, children) VALUES ('Jarrad Ferraron','48611174704','2346.79','1985-11-05T21:11:33Z','1');
 INSERT INTO tb_client(name, cpf, income, birth_Date, children) VALUES ('Diane Arrandale','23354249714','2688.31','1977-02-02T09:27:23Z','3');

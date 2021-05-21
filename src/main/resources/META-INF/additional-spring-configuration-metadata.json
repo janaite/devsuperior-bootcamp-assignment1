@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "app.paged.lines.max",
+  "type": "java.lang.Integer",
+  "description": "maximum allowed number of registers in resultset of a paged query"
+}]}
