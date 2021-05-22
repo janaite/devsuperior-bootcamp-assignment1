@@ -5,6 +5,8 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.janaite.devsuperior.bootcamp.assignment1.dto.ClientDTO;
 import net.janaite.devsuperior.bootcamp.assignment1.entities.Client;
 import net.janaite.devsuperior.bootcamp.assignment1.repositories.ClientRepository;
+import net.janaite.devsuperior.bootcamp.assignment1.services.exceptions.DatabaseException;
 import net.janaite.devsuperior.bootcamp.assignment1.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -51,6 +54,17 @@ public class ClientService {
 			return new ClientDTO(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(String.format("ID not found [%d]", id));
+		}
+	}
+	
+	// dont use @Transcation, you'll have to capture a exception
+	public void delete(Long id) {
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(String.format("ID not found [%d]", id));
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity Violation");
 		}
 	}
 
